@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #loginBox {
+            background-color: lightblue;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 10px gray;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginBox">
+
+        <h2>Login Form</h2>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Enter Username"
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter Password"
+        >
+
+        <br><br>
+
+        <button
+            type="button"
+            id="loginButton"
+            onclick="login()">
+            Login
+        </button>
+
+        <p id="message"></p>
+
+    </div>
+
+    <script>
+
+        function login() {
+
+            var username =
+                document.getElementById("username").value;
+
+            var password =
+                document.getElementById("password").value;
+
+            if (username === "student" &&
+                password === "12345") {
+
+                document.getElementById("message").innerText =
+                    "Login Successful";
+
+            } else {
+
+                document.getElementById("message").innerText =
+                    "Invalid Username or Password";
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>
