@@ -1,22 +1,50 @@
-FROM maven:3.9.9-eclipse-temurin-17
+name: Maven Selenium DockerHub CI
 
-WORKDIR /app
+on:
+  push:
+    branches:
+      - main
 
-# Install Chrome dependencies and Chromium
-RUN apt-get update && apt-get install -y chromium \
-    && rm -rf /var/lib/apt/lists/*
+  workflow_dispatch:
 
-# Copy Maven project
-COPY pom.xml .
+jobs:
+  build-and-push:
 
-# Download dependencies
-RUN mvn dependency:go-offline
+    runs-on: ubuntu-latest
 
-# Copy remaining project files
-COPY . .
+    steps:
 
-# Set Chrome binary
-ENV CHROME_BIN=/usr/bin/chromium
+      # Checkout GitHub Repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-# Run TestNG tests
-CMD ["mvn", "clean", "test"]
+      # Setup Java
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      # Install Chrome
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      # Run TestNG Tests
+      - name: Run Maven Tests
+        run: mvn clean test
+
+      # Login to DockerHub
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build and Push Docker Image
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/demo2:latest
